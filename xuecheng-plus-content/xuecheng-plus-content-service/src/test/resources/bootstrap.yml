@@ -1,0 +1,22 @@
+#微服务配置
+spring:
+  application:
+    name: content-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/xc_content?serverTimezone=UTC&userUnicode=true&useSSL=false&
+    username: lhp
+    password: abc286258
+  main:
+    banner-mode: off
+# 日志文件配置路径
+logging:
+  config: classpath:log4j2-dev.xml
+  level:
+    sql: info
+mybatis-plus:
+  global-config:
+    banner: off
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:/mapper/**/*.xml
