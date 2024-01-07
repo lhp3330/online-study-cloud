@@ -30,21 +30,19 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
      * 课程分页查询
      */
     @Override
-    public PageResult<CourseBase> QueryCourseBaseList(PageParams pageParams, QueryCourseParamsDTO queryCourseParamsDTO) {
+    public PageResult<CourseBase> QueryCourseBaseList(PageParams pageParams, QueryCourseParamsDTO dto) {
        // 条件构造
         LambdaQueryWrapper<CourseBase> wrapper = new LambdaQueryWrapper<>();
-        wrapper.like(StringUtils.isEmpty(queryCourseParamsDTO.getCourseName()), CourseBase::getName, queryCourseParamsDTO.getCourseName());
-        wrapper.eq(StringUtils.isEmpty(queryCourseParamsDTO.getAuditStatus()), CourseBase::getAuditStatus, queryCourseParamsDTO.getAuditStatus());
-        wrapper.eq(StringUtils.isEmpty(queryCourseParamsDTO.getPublishStatus()), CourseBase::getStatus, queryCourseParamsDTO.getPublishStatus());
+        wrapper.like(StringUtils.isEmpty(dto.getCourseName()), CourseBase::getName, dto.getCourseName());
+        wrapper.eq(StringUtils.isEmpty(dto.getAuditStatus()), CourseBase::getAuditStatus, dto.getAuditStatus());
+        wrapper.eq(StringUtils.isEmpty(dto.getPublishStatus()), CourseBase::getStatus, dto.getPublishStatus());
         // 分页
         Page<CourseBase> page = new Page<>(pageParams.getPageNo(), pageParams.getPageSize());
         Page<CourseBase> pageResult = courseBaseMapper.selectPage(page, wrapper);
 
-        PageResult<CourseBase> result = new PageResult<>(pageResult.getRecords(),
+        return new PageResult<>(pageResult.getRecords(),
                 pageResult.getTotal(),
                 pageParams.getPageNo(),
                 pageParams.getPageSize());
-
-        return result;
     }
 }
