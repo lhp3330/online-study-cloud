@@ -27,3 +27,4 @@ swagger:
 mybatis-plus:
   global-config:
     banner: off
+  mapper-locations: classpath*:/mapper/**/*.xml

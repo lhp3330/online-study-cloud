@@ -18,4 +18,17 @@
         id, name, label, parentid, is_show, orderby, is_leaf
     </sql>
 
+    <select id="selectTreeNodes" resultType="com.xuecheng.content.model.dto.CourseCategoryTreeDTO">
+        select
+            *
+        from course_category one
+                 inner join course_category two on one.id = two.parentid
+        where one.parentid = #{id}
+          and one.is_show = #{id}
+          and two.is_show = #{id}
+        order by one.orderby,
+                 two.orderby
+
+    </select>
+
 </mapper>
