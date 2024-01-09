@@ -53,8 +53,8 @@ public class ContentTestApplication {
 
     @Test
     public void pageServiceTest() {
-        PageParams params = new PageParams(1L, 10L);
-        QueryCourseParamsDTO dto = new QueryCourseParamsDTO("测试", "202004", "203001");
+        PageParams params = new PageParams(2L, 3L);
+        QueryCourseParamsDTO dto = new QueryCourseParamsDTO("java", "202004", "203001");
         PageResult<CourseBase> result = courseBaseInfoService.QueryCourseBaseList(params, dto);
         System.out.println(result);
     }

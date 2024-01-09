@@ -7,10 +7,11 @@ spring:
   application:
     name: content-api
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/xc_content?serverTimezone=UTC&userUnicode=true&useSSL=false&
     username: lhp
     password: abc286258
+    type: com.alibaba.druid.pool.DruidDataSource
   main:
     banner-mode: off
 # 日志文件配置路径
@@ -23,3 +24,6 @@ swagger:
   base-package: com.xuecheng.content
   enabled: true
   version: 1.0.0
+mybatis-plus:
+  global-config:
+    banner: off

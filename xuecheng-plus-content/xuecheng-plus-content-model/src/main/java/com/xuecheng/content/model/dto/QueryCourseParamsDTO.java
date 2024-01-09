@@ -14,10 +14,10 @@ import lombok.ToString;
 @NoArgsConstructor
 public class QueryCourseParamsDTO {
 
-    //审核状态
-    private String auditStatus;
     //课程名称
     private String courseName;
+    //审核状态
+    private String auditStatus;
     //发布状态
     private String publishStatus;
 
