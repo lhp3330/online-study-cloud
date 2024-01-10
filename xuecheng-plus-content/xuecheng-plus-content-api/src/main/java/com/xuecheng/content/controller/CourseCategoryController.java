@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- 课程分类接口]
+ 课程分类接口
  */
 @Slf4j
 @RestController

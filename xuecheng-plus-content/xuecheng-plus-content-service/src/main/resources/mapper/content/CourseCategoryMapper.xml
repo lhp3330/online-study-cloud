@@ -19,24 +19,16 @@
     </sql>
 
     <select id="selectTreeNodes" resultType="com.xuecheng.content.model.dto.CourseCategoryTreeDTO">
-        select
-            one.id            ,
-            one.name          ,
-            one.parentid      ,
-            one.orderby       ,
-            one.label         ,
-            two.id            ,
-            two.name          ,
-            two.parentid      ,
-            two.orderby       ,
-            two.label
-        from course_category one
-                 inner join course_category two on one.id = two.parentid
-        where one.parentid = #{id}
-          and one.is_show = #{id}
-          and two.is_show = #{id}
-        order by one.orderby,
-                 two.orderby
+        select t3.* from course_category t3
+                    where parentid
+                                in (
+                                    select t2.parentid
+                                       from course_category t1,
+                                            course_category t2
+                                       where t1.id = t2.parentid
+                                       or t1.id = #{id}
+                                    )
+        order by t3.id;
     </select>
 
 </mapper>

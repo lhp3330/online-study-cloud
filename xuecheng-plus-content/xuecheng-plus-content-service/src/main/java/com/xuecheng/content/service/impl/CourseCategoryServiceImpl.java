@@ -41,14 +41,14 @@ public class CourseCategoryServiceImpl implements CourseCategoryService {
         //最终返回的list
         List<CourseCategoryTreeDTO> categoryTreeDTOs = new ArrayList<>();
         //依次遍历每个元素,排除根节点
-        courseCategoryTreeDTOs.stream().filter(item->!id.equals(item.getId())).forEach(item->{
+        courseCategoryTreeDTOs.stream().filter(item -> !id.equals(item.getId())).forEach(item -> {
             if(item.getParentid().equals(id)){
                 categoryTreeDTOs.add(item);
             }
             //找到当前节点的父节点
             CourseCategoryTreeDTO courseCategoryTreeDTO = mapTemp.get(item.getParentid());
             if(courseCategoryTreeDTO!=null){
-                if(courseCategoryTreeDTO.getChildrenTreeNodes() ==null){
+                if(courseCategoryTreeDTO.getChildrenTreeNodes() == null){
                     courseCategoryTreeDTO.setChildrenTreeNodes(new ArrayList<CourseCategoryTreeDTO>());
                 }
                 //下边开始往ChildrenTreeNodes属性中放子节点
