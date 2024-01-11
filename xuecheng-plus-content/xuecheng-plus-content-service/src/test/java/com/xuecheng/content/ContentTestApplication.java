@@ -55,7 +55,7 @@ public class ContentTestApplication {
     public void pageServiceTest() {
         PageParams params = new PageParams(2L, 3L);
         QueryCourseParamsDTO dto = new QueryCourseParamsDTO("java", "202004", "203001");
-        PageResult<CourseBase> result = courseBaseInfoService.QueryCourseBaseList(params, dto);
+        PageResult<CourseBase> result = courseBaseInfoService.queryCourseBaseList(params, dto);
         System.out.println(result);
     }
 }

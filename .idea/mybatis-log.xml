@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="MyBatisLog">
+    <option name="settings_impactLog" value="true" />
+    <option name="settings_preparing" value="Preparing:" />
+    <option name="settings_parameters" value="Parameters:" />
+    <option name="settings_filterLines" value="" />
     <option name="donot_show_again" value="true" />
   </component>
 </project>
