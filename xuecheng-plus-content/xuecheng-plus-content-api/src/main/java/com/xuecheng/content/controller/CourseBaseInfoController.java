@@ -9,11 +9,13 @@ import com.xuecheng.base.model.PageParams;
 import com.xuecheng.base.model.PageResult;
 import com.xuecheng.content.model.dto.AddCourseDTO;
 import com.xuecheng.content.model.dto.QueryCourseParamsDTO;
+import com.xuecheng.content.model.dto.UpdateCourseDTO;
 import com.xuecheng.content.model.pojo.CourseBase;
 import com.xuecheng.content.model.vo.CourseBaseInfoVO;
 import com.xuecheng.content.service.CourseBaseInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -26,15 +28,27 @@ public class CourseBaseInfoController {
     private CourseBaseInfoService courseBaseInfoService;
 
 
-    @ApiOperation("课程信息查询接口")
+    @ApiOperation("query list")
     @PostMapping("/course/list")
     public PageResult<CourseBase> list(PageParams pageParams, @RequestBody(required = false) QueryCourseParamsDTO queryCourseParamsDTO) {
         return courseBaseInfoService.queryCourseBaseList(pageParams, queryCourseParamsDTO);
     }
 
-    @ApiOperation("新课程添加接口")
+    @ApiOperation("create new recode")
     @PostMapping("/course")
-    public CourseBaseInfoVO createCourseBaseInfo(@RequestBody AddCourseDTO addCourseDTO) {
+    public CourseBaseInfoVO createCourseBaseInfo(@RequestBody @Validated AddCourseDTO addCourseDTO) {
         return courseBaseInfoService.saveCourseBaseInfo(999L, addCourseDTO);
+    }
+
+    @ApiOperation("query by id")
+    @GetMapping("/course/{id}")
+    public CourseBaseInfoVO queryCourseById(@PathVariable Long id) {
+        return courseBaseInfoService.queryCourseById(id);
+    }
+
+    @ApiOperation("update recode")
+    @PutMapping("/course")
+    public CourseBaseInfoVO updateCourse(@RequestBody UpdateCourseDTO updateCourseDTO) {
+        return courseBaseInfoService.updateCourseBaseInfo(updateCourseDTO);
     }
 }

@@ -22,9 +22,9 @@ Content-Type: application/json
   "wechat": "223344",
   "phone": "13333333",
   "validDays": 365,
-  "mt": "1-1",
-  "st": "1-1-1",
-  "name": "测试课程777",
+  "mt": "",
+  "st": "",
+  "name": "",
   "pic": "",
   "teachmode": "200002",
   "users": "初级人员",
@@ -32,4 +32,7 @@ Content-Type: application/json
   "grade": "204001",
   "description": "测试测试测测测测测"
 }
+
+### 根据id查询课程base
+GET {{content_host}}/content/course/1
 

@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 /**
  *  前端课程信息展示VO
  */
-
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class CourseBaseInfoVO extends CourseBase {

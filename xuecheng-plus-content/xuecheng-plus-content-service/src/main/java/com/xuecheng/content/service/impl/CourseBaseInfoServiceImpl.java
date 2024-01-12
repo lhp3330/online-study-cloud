@@ -16,6 +16,7 @@ import com.xuecheng.content.mapper.CourseCategoryMapper;
 import com.xuecheng.content.mapper.CourseMarketMapper;
 import com.xuecheng.content.model.dto.AddCourseDTO;
 import com.xuecheng.content.model.dto.QueryCourseParamsDTO;
+import com.xuecheng.content.model.dto.UpdateCourseDTO;
 import com.xuecheng.content.model.pojo.CourseBase;
 import com.xuecheng.content.model.pojo.CourseCategory;
 import com.xuecheng.content.model.pojo.CourseMarket;
@@ -80,7 +81,7 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
         // 设置机构id
         courseBase.setCompanyId(companyId);
         // 添加时间
-        courseBase.setChangeDate(LocalDateTime.now());
+        courseBase.setCreateDate(LocalDateTime.now());
         // insert in to db
         courseBaseMapper.insert(courseBase);
 
@@ -109,13 +110,12 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
             // 营销信息不存在则添加
             courseMarketMapper.insert(courseMarket);
         }
-
     }
 
     /**
      * 通过课程id查询课程基本信息
      */
-    private CourseBaseInfoVO queryCourseById(Long id) {
+    public CourseBaseInfoVO queryCourseById(Long id) {
         // 课程base信息
         CourseBase courseBase = courseBaseMapper.selectById(id);
         // 课程所属分类信息
@@ -130,9 +130,33 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
         CourseBaseInfoVO courseBaseInfoVO = new CourseBaseInfoVO();
         BeanUtils.copyProperties(courseBase, courseBaseInfoVO);
         BeanUtils.copyProperties(courseMarket, courseBaseInfoVO);
-        courseBaseInfoVO.setMt(mtCategory.getName());
-        courseBaseInfoVO.setSt(stCategory.getName());
+        courseBaseInfoVO.setMtName(mtCategory.getName());
+        courseBaseInfoVO.setStName(stCategory.getName());
 
         return courseBaseInfoVO;
+    }
+
+    /**
+     * 修改课程信息
+     *
+     * @param updateCourseDTO
+     * @return
+     */
+    @Transactional
+    public CourseBaseInfoVO updateCourseBaseInfo(UpdateCourseDTO updateCourseDTO) {
+        // 更新base 和 classic
+        CourseBase courseBase = new CourseBase();
+        BeanUtils.copyProperties(updateCourseDTO, courseBase);
+        // update time
+        courseBase.setChangeDate(LocalDateTime.now());
+        //
+        courseBaseMapper.updateById(courseBase);
+
+        // 更新market
+        CourseMarket courseMarket = new CourseMarket();
+        BeanUtils.copyProperties(updateCourseDTO, courseMarket);
+        courseMarketMapper.updateById(courseMarket);
+        //
+        return queryCourseById(updateCourseDTO.getId());
     }
 }
