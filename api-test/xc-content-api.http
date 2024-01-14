@@ -36,3 +36,17 @@ Content-Type: application/json
 ### 根据id查询课程base
 GET {{content_host}}/content/course/1
 
+### teachPlan
+GET {{content_host}}/content/teachplan/25/tree-nodes
+
+### update or create teachPlan
+POST {{content_host}}/content/teachplan
+Content-Type: application/json
+
+{
+  "id": 3,
+  "courseId" : 25,
+  "parentid": 43,
+  "grade" : 2,
+  "pname" : "sql查询"
+}
