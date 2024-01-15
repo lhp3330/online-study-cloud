@@ -50,3 +50,6 @@ Content-Type: application/json
   "grade" : 2,
   "pname" : "sql查询"
 }
+
+### delete teachPlan by id
+DELETE {{content_host}}/content/teachplan/153

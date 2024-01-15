@@ -6,6 +6,7 @@ package com.xuecheng.content.controller;
 */
 
 import com.xuecheng.content.model.dto.UpdateOrCreateTeachPlanDTO;
+import com.xuecheng.content.model.vo.DeleteTeachPlanVO;
 import com.xuecheng.content.model.vo.TeachPlanVO;
 import com.xuecheng.content.service.TeacherPlanService;
 import org.springframework.web.bind.annotation.*;
@@ -24,12 +25,12 @@ public class TeacherPlanController {
 
     /**
      * teachPlanTreeNodes query
-     * @param id
+     * @param courseId
      * @return
      */
-    @GetMapping("/teachplan/{id}/tree-nodes")
-    public List<TeachPlanVO> teachPlanTreeNodes(@PathVariable Long id) {
-        return teacherPlanService.queryTeachPlanTreeNodes(id);
+    @GetMapping("/teachplan/{courseId}/tree-nodes")
+    public List<TeachPlanVO> teachPlanTreeNodes(@PathVariable Long courseId) {
+        return teacherPlanService.queryTeachPlanTreeNodes(courseId);
     }
 
     /**
@@ -39,4 +40,29 @@ public class TeacherPlanController {
     public void newTeachPlan(@RequestBody UpdateOrCreateTeachPlanDTO updateOrCreateTeachPlanDTO) {
         teacherPlanService.saveOrCreateTeachPlan(updateOrCreateTeachPlanDTO);
     }
+
+    /**
+     * delete teachPlan
+     */
+    @DeleteMapping("/teachplan/{id}")
+    public DeleteTeachPlanVO deleteTeachPlan(@PathVariable Long id) {
+        return teacherPlanService.deleteTeachPlan(id);
+    }
+
+    /**
+     * teachPlan moveDown(change sort)
+     */
+    @PostMapping("/teachplan/movedown/{id}")
+    public void teachPlanMoveDown(@PathVariable Long id) {
+        teacherPlanService.teachPlanMoveDown(id);
+    }
+
+    /**
+     * teachPlan moveup(change sort)
+     */
+    @PostMapping("/teachplan/moveup/{id}")
+    public void teachPlanMoveUp(@PathVariable Long id) {
+        teacherPlanService.teachPlanMoveUp(id);
+    }
+
 }

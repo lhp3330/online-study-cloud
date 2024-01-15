@@ -7,8 +7,11 @@ package com.xuecheng.content.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.xuecheng.content.mapper.TeachplanMapper;
+import com.xuecheng.content.mapper.TeachplanMediaMapper;
 import com.xuecheng.content.model.dto.UpdateOrCreateTeachPlanDTO;
 import com.xuecheng.content.model.pojo.Teachplan;
+import com.xuecheng.content.model.pojo.TeachplanMedia;
+import com.xuecheng.content.model.vo.DeleteTeachPlanVO;
 import com.xuecheng.content.model.vo.TeachPlanVO;
 import com.xuecheng.content.service.TeacherPlanService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,14 +31,18 @@ public class TeacherPlanServiceImpl implements TeacherPlanService {
     @Resource
     private TeachplanMapper teachplanMapper;
 
+    @Resource
+    private TeachplanMediaMapper teachplanMediaMapper;
+
     /**
      * teachPlanTreeNodes
-     * @param id
+     * @param courseId
      * @return
      */
     @Override
-    public List<TeachPlanVO> queryTeachPlanTreeNodes(Long id) {
-        return teachplanMapper.selectTreeNodes(id);
+    public List<TeachPlanVO> queryTeachPlanTreeNodes(Long courseId) {
+        List<TeachPlanVO> teachPlanVOS = teachplanMapper.selectTreeNodes(courseId);
+        return teachPlanVOS;
     }
 
     /**
@@ -45,7 +52,7 @@ public class TeacherPlanServiceImpl implements TeacherPlanService {
     @Transactional
     public void saveOrCreateTeachPlan(UpdateOrCreateTeachPlanDTO updateOrCreateTeachPlanDTO) {
         Long id = updateOrCreateTeachPlanDTO.getId();
-        // id不为空则更新
+        // id not null than do update
         if (id != null) {
             Teachplan teachplan = teachplanMapper.selectById(id);
             BeanUtils.copyProperties(updateOrCreateTeachPlanDTO, teachplan);
@@ -62,6 +69,12 @@ public class TeacherPlanServiceImpl implements TeacherPlanService {
         }
     }
 
+    /**
+     *  create new sortNum for new teachPlan records
+     * @param courseId
+     * @param parentId
+     * @return
+     */
     private int getSortNum(Long courseId, Long parentId) {
         // 取出兄弟关系课程,构造新纪录排序数
         LambdaQueryWrapper<Teachplan> wrapper = new LambdaQueryWrapper<>();
@@ -77,5 +90,82 @@ public class TeacherPlanServiceImpl implements TeacherPlanService {
             }
         }
         return sort + 1;
+    }
+
+    /**
+     * delete teachPlan
+     * @param id
+     */
+    @Override
+    @Transactional
+    public DeleteTeachPlanVO deleteTeachPlan(Long id) {
+        // is a grade 1 course?
+        Teachplan teachplan = teachplanMapper.selectById(id);
+        Integer grade = teachplan.getGrade();
+        //
+        if (grade == 1) {
+            LambdaQueryWrapper<Teachplan> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(Teachplan::getParentid, id)
+                    .eq(Teachplan::getGrade, 2);
+            // judge have grade 2 teachPlan
+            List<Teachplan> teachplanList = teachplanMapper.selectList(wrapper);
+            if (teachplanList == null || teachplanList.size() == 0) {
+                teachplanMapper.deleteById(id);
+            }else {
+                return new DeleteTeachPlanVO("120409", "this course hava grade 2 course cant be deleted");
+            }
+        }else {
+            // delete grade 2 course and its teachMedia
+            LambdaQueryWrapper<TeachplanMedia> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(TeachplanMedia::getTeachplanId, id);
+            teachplanMapper.deleteById(id);
+            teachplanMediaMapper.delete(wrapper);
+        }
+        return new DeleteTeachPlanVO("200", "");
+    }
+
+    /**
+     * teachPlan moveDown(change sort)
+     * @param id
+     */
+    @Override
+    @Transactional
+    public void teachPlanMoveDown(Long id) {
+        // get params id teachPlans sort
+        Teachplan originTeachPlan = teachplanMapper.selectById(id);
+        Integer originSortNum = originTeachPlan.getOrderby();
+        // get the teachPlan which sort gt 1 above params teachPlan
+        LambdaQueryWrapper<Teachplan> wrapper = new LambdaQueryWrapper<Teachplan>()
+                .eq(Teachplan::getParentid, originTeachPlan.getParentid())
+                .eq(Teachplan::getOrderby, originSortNum + 1);
+        Teachplan preTeachPlan = teachplanMapper.selectOne(wrapper);
+        // swap sortNum
+        originTeachPlan.setOrderby(preTeachPlan.getOrderby());
+        preTeachPlan.setOrderby(originSortNum);
+        // db
+        teachplanMapper.updateById(originTeachPlan);
+        teachplanMapper.updateById(preTeachPlan);
+    }
+
+    /**
+     * teachPlan moveUp(change sort)
+     * @param id
+     */
+    @Override
+    public void teachPlanMoveUp(Long id) {
+        // get params id teachPlans sort
+        Teachplan originTeachPlan = teachplanMapper.selectById(id);
+        Integer originSortNum = originTeachPlan.getOrderby();
+        // get the teachPlan which sort gt 1 above params teachPlan
+        LambdaQueryWrapper<Teachplan> wrapper = new LambdaQueryWrapper<Teachplan>()
+                .eq(Teachplan::getParentid, originTeachPlan.getParentid())
+                .eq(Teachplan::getOrderby, originSortNum - 1);
+        Teachplan preTeachPlan = teachplanMapper.selectOne(wrapper);
+        // swap sortNum
+        originTeachPlan.setOrderby(preTeachPlan.getOrderby());
+        preTeachPlan.setOrderby(originSortNum);
+        // db
+        teachplanMapper.updateById(originTeachPlan);
+        teachplanMapper.updateById(preTeachPlan);
     }
 }
