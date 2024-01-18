@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BaseException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ExceptionResponse customException(BaseException e) {
-        log.error("【系统异常】{}", e.getMessage(), e);
+        log.error("【自定义异常】{}", e.getMessage(), e);
         return new ExceptionResponse(e.getMessage());
     }
 

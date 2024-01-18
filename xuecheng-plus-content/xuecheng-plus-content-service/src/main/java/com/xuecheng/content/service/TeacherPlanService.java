@@ -1,6 +1,8 @@
 package com.xuecheng.content.service;
 
+import com.xuecheng.content.model.dto.AddCourseTeacherDTO;
 import com.xuecheng.content.model.dto.UpdateOrCreateTeachPlanDTO;
+import com.xuecheng.content.model.pojo.CourseTeacher;
 import com.xuecheng.content.model.vo.DeleteTeachPlanVO;
 import com.xuecheng.content.model.vo.TeachPlanVO;
 
@@ -32,4 +34,6 @@ public interface TeacherPlanService {
      * teachPlan moveUp(change sort)
      */
     void teachPlanMoveUp(Long id);
+
+
 }

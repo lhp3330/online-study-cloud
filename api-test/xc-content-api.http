@@ -1,4 +1,4 @@
-### 课程分页查询
+### course page query
 POST {{content_host}}/content/course/list?pageNo=1&pageSize=10
 Content-Type: application/json
 
@@ -7,10 +7,10 @@ Content-Type: application/json
   "audiStatus": "202002"
 }
 
-### 课程分类查询
+### course classic treeNodes
 GET {{content_host}}/content/course-category/tree-nodes?id=1
 
-### 创建课程
+### create a new course
 POST {{content_host}}/content/course
 Content-Type: application/json
 
@@ -33,7 +33,7 @@ Content-Type: application/json
   "description": "测试测试测测测测测"
 }
 
-### 根据id查询课程base
+### query course base info by Id
 GET {{content_host}}/content/course/1
 
 ### teachPlan
@@ -53,3 +53,33 @@ Content-Type: application/json
 
 ### delete teachPlan by id
 DELETE {{content_host}}/content/teachplan/153
+
+### query course teacher by courseId
+GET {{content_host}}/content/courseTeacher/list/72
+
+### add new Course teacher info
+POST {{content_host}}/content/courseTeacher
+Content-Type: application/json
+
+{
+  "courseId": "999",
+  "teacherName": "999",
+  "position": "666",
+  "introduction": "66667"
+}
+
+###  update Course teacher info
+PUT {{content_host}}/content/courseTeacher
+Content-Type: application/json
+
+{
+  "id": 22,
+  "courseId": 999,
+  "teacherName": "999666",
+  "position": "666555",
+  "introduction": "66667888899",
+  "photograph": "www.baidu.com"
+}
+
+### delete a course teacher by id && courseId
+DELETE {{content_host}}/content/courseTeacher/course/21/999

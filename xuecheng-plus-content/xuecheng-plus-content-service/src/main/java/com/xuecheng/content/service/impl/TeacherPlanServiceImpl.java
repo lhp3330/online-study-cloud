@@ -6,9 +6,14 @@ package com.xuecheng.content.service.impl;
 */
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.xuecheng.base.enums.CustomException;
+import com.xuecheng.base.exception.BaseException;
+import com.xuecheng.content.mapper.CourseTeacherMapper;
 import com.xuecheng.content.mapper.TeachplanMapper;
 import com.xuecheng.content.mapper.TeachplanMediaMapper;
+import com.xuecheng.content.model.dto.AddCourseTeacherDTO;
 import com.xuecheng.content.model.dto.UpdateOrCreateTeachPlanDTO;
+import com.xuecheng.content.model.pojo.CourseTeacher;
 import com.xuecheng.content.model.pojo.Teachplan;
 import com.xuecheng.content.model.pojo.TeachplanMedia;
 import com.xuecheng.content.model.vo.DeleteTeachPlanVO;
@@ -33,6 +38,9 @@ public class TeacherPlanServiceImpl implements TeacherPlanService {
 
     @Resource
     private TeachplanMediaMapper teachplanMediaMapper;
+
+    @Resource
+    private CourseTeacherMapper courseTeacherMapper;
 
     /**
      * teachPlanTreeNodes
@@ -136,9 +144,15 @@ public class TeacherPlanServiceImpl implements TeacherPlanService {
         Integer originSortNum = originTeachPlan.getOrderby();
         // get the teachPlan which sort gt 1 above params teachPlan
         LambdaQueryWrapper<Teachplan> wrapper = new LambdaQueryWrapper<Teachplan>()
+                .eq(Teachplan::getGrade, originTeachPlan.getGrade())
+                .eq(Teachplan::getCourseId , originTeachPlan.getCourseId())
                 .eq(Teachplan::getParentid, originTeachPlan.getParentid())
                 .eq(Teachplan::getOrderby, originSortNum + 1);
         Teachplan preTeachPlan = teachplanMapper.selectOne(wrapper);
+        // if null that means the teachPlan now at the last position
+        if (preTeachPlan == null) {
+            throw new BaseException(CustomException.CANT_MOVE);
+        }
         // swap sortNum
         originTeachPlan.setOrderby(preTeachPlan.getOrderby());
         preTeachPlan.setOrderby(originSortNum);
@@ -158,9 +172,15 @@ public class TeacherPlanServiceImpl implements TeacherPlanService {
         Integer originSortNum = originTeachPlan.getOrderby();
         // get the teachPlan which sort gt 1 above params teachPlan
         LambdaQueryWrapper<Teachplan> wrapper = new LambdaQueryWrapper<Teachplan>()
+                .eq(Teachplan::getGrade, originTeachPlan.getGrade())
+                .eq(Teachplan::getCourseId, originTeachPlan.getCourseId())
                 .eq(Teachplan::getParentid, originTeachPlan.getParentid())
                 .eq(Teachplan::getOrderby, originSortNum - 1);
         Teachplan preTeachPlan = teachplanMapper.selectOne(wrapper);
+        // if null that means the teachPlan now at the first position
+        if (preTeachPlan == null) {
+            throw new BaseException(CustomException.CANT_MOVE);
+        }
         // swap sortNum
         originTeachPlan.setOrderby(preTeachPlan.getOrderby());
         preTeachPlan.setOrderby(originSortNum);

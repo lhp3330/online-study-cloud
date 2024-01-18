@@ -5,7 +5,9 @@ package com.xuecheng.content.controller;
    @Date:2024/1/13  23:10
 */
 
+import com.xuecheng.content.model.dto.AddCourseTeacherDTO;
 import com.xuecheng.content.model.dto.UpdateOrCreateTeachPlanDTO;
+import com.xuecheng.content.model.pojo.CourseTeacher;
 import com.xuecheng.content.model.vo.DeleteTeachPlanVO;
 import com.xuecheng.content.model.vo.TeachPlanVO;
 import com.xuecheng.content.service.TeacherPlanService;
