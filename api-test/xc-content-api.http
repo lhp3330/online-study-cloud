@@ -83,3 +83,6 @@ Content-Type: application/json
 
 ### delete a course teacher by id && courseId
 DELETE {{content_host}}/content/courseTeacher/course/21/999
+
+### delete course by id
+DELETE {{content_host}}/content/course/124

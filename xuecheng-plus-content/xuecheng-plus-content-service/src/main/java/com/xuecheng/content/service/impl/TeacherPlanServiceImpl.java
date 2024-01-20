@@ -39,9 +39,6 @@ public class TeacherPlanServiceImpl implements TeacherPlanService {
     @Resource
     private TeachplanMediaMapper teachplanMediaMapper;
 
-    @Resource
-    private CourseTeacherMapper courseTeacherMapper;
-
     /**
      * teachPlanTreeNodes
      * @param courseId
@@ -120,7 +117,7 @@ public class TeacherPlanServiceImpl implements TeacherPlanService {
             if (teachplanList == null || teachplanList.size() == 0) {
                 teachplanMapper.deleteById(id);
             }else {
-                return new DeleteTeachPlanVO("120409", "this course hava grade 2 course cant be deleted");
+                return new DeleteTeachPlanVO("120409", "this course hava grade 2 course so can't be deleted");
             }
         }else {
             // delete grade 2 course and its teachMedia

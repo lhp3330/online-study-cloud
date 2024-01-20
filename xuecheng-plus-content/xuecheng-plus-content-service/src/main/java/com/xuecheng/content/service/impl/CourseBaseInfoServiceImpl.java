@@ -7,19 +7,17 @@ package com.xuecheng.content.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xuecheng.base.constant.StatusConstant;
 import com.xuecheng.base.enums.CustomException;
+import com.xuecheng.base.exception.BaseException;
 import com.xuecheng.base.exception.ParamsIsNullException;
 import com.xuecheng.base.model.PageParams;
 import com.xuecheng.base.model.PageResult;
-import com.xuecheng.content.mapper.CourseBaseMapper;
-import com.xuecheng.content.mapper.CourseCategoryMapper;
-import com.xuecheng.content.mapper.CourseMarketMapper;
+import com.xuecheng.content.mapper.*;
 import com.xuecheng.content.model.dto.AddCourseDTO;
 import com.xuecheng.content.model.dto.QueryCourseParamsDTO;
 import com.xuecheng.content.model.dto.UpdateCourseDTO;
-import com.xuecheng.content.model.pojo.CourseBase;
-import com.xuecheng.content.model.pojo.CourseCategory;
-import com.xuecheng.content.model.pojo.CourseMarket;
+import com.xuecheng.content.model.pojo.*;
 import com.xuecheng.content.model.vo.CourseBaseInfoVO;
 import com.xuecheng.content.service.CourseBaseInfoService;
 import lombok.extern.slf4j.Slf4j;
@@ -44,8 +42,18 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
     @Resource
     private CourseMarketMapper courseMarketMapper;
 
+    @Resource
+    private TeachplanMapper teachplanMapper;
+
+    @Resource
+    private TeachplanMediaMapper teachplanMediaMapper;
+
+    @Resource
+    private CourseTeacherMapper courseTeacherMapper;
+
+
     /**
-     * 课程分页查询
+     * course page query
      */
     public PageResult<CourseBase> queryCourseBaseList(PageParams pageParams, QueryCourseParamsDTO dto) {
        // 条件构造
@@ -64,7 +72,7 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
     }
 
     /**
-     * 新增课程
+     * add a new course
      */
     @Transactional
     public CourseBaseInfoVO saveCourseBaseInfo(Long companyId, AddCourseDTO addCourseDTO) {
@@ -93,7 +101,7 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
     }
 
     /**
-     * 添加课程营销信息
+     * add courseMarket info
      */
     private void saveCourseMarket(Long id, AddCourseDTO addCourseDTO) {
         // 参数合法性校验
@@ -113,7 +121,7 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
     }
 
     /**
-     * 通过课程id查询课程基本信息
+     * query course by id
      */
     public CourseBaseInfoVO queryCourseById(Long id) {
         // 课程base信息
@@ -137,10 +145,8 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
     }
 
     /**
-     * 修改课程信息
-     *
+     * update courseBaseInfo
      * @param updateCourseDTO
-     * @return
      */
     @Transactional
     public CourseBaseInfoVO updateCourseBaseInfo(UpdateCourseDTO updateCourseDTO) {
@@ -158,5 +164,36 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
         courseMarketMapper.updateById(courseMarket);
         //
         return queryCourseById(updateCourseDTO.getId());
+    }
+
+    /**
+     * delete course by id
+     * @param id
+     */
+    @Override
+    @Transactional
+    public void deleteCourseById(Long id) {
+        CourseBase courseBase = courseBaseMapper.selectById(id);
+        // 1. get the course publish status
+        String publishStatus = courseBase.getAuditStatus();
+        if (!publishStatus.equals(StatusConstant.COURSE_UN_PUBLISH)) {
+            throw new BaseException(CustomException.CANT_DELETE);
+        }
+        // 2. delete courseBaseInfo
+        courseBaseMapper.deleteById(id);
+        // 3. delete courseMarketInfo
+        courseMarketMapper.deleteById(id);
+        // 4. delete teachPlan
+        LambdaQueryWrapper<Teachplan> wrapper1 = new LambdaQueryWrapper<>();
+        wrapper1.eq(Teachplan::getCourseId, id);
+        teachplanMapper.delete(wrapper1);
+        // 5. delete teachPlanMedia
+        LambdaQueryWrapper<TeachplanMedia> wrapper2 = new LambdaQueryWrapper<>();
+        wrapper2.eq(TeachplanMedia::getCourseId, id);
+        teachplanMediaMapper.delete(wrapper2);
+        // 6. delete course teacher
+        LambdaQueryWrapper<CourseTeacher> wrapper3 = new LambdaQueryWrapper<>();
+        wrapper3.eq(CourseTeacher::getCourseId, id);
+        courseTeacherMapper.delete(wrapper3);
     }
 }

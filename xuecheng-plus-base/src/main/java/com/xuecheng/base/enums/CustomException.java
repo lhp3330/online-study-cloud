@@ -12,7 +12,8 @@ public enum CustomException {
 	OBJECT_NULL("对象为空"),
 	QUERY_NULL("查询结果为空"),
 	REQUEST_NULL("请求参数为空"),
-	CANT_MOVE("当前位置已无法移动");
+	CANT_MOVE("当前位置已无法移动"),
+	CANT_DELETE("当前课程无法删除");
 
 	private final String errorMessage;
 
@@ -20,7 +21,7 @@ public enum CustomException {
 		return errorMessage;
 	}
 
-	private CustomException(String errMessage) {
+	CustomException(String errMessage) {
 		this.errorMessage = errMessage;
 	}
 

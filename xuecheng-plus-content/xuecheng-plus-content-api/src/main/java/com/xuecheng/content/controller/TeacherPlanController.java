@@ -11,6 +11,7 @@ import com.xuecheng.content.model.pojo.CourseTeacher;
 import com.xuecheng.content.model.vo.DeleteTeachPlanVO;
 import com.xuecheng.content.model.vo.TeachPlanVO;
 import com.xuecheng.content.service.TeacherPlanService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -39,6 +40,7 @@ public class TeacherPlanController {
      * update or create teachPlan
      */
     @PostMapping("/teachplan")
+    @ResponseStatus(HttpStatus.OK)
     public void newTeachPlan(@RequestBody UpdateOrCreateTeachPlanDTO updateOrCreateTeachPlanDTO) {
         teacherPlanService.saveOrCreateTeachPlan(updateOrCreateTeachPlanDTO);
     }
