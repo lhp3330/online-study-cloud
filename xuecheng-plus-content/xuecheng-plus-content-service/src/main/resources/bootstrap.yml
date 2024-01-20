@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: content-service
+  profiles:
+    active: dev
+  main:
+    banner-mode: off
+
+  cloud:
+    nacos:
+      server-addr: 47.96.91.58:8848
+      discovery:
+        namespace: dev
+        group:  xuecheng-plus-project
+      config:
+        namespace: dev
+        group:  xuecheng-plus-project
+        file-extension: yaml
+        refresh-enabled: true
+
