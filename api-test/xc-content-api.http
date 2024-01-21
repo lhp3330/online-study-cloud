@@ -1,5 +1,5 @@
 ### course page query
-POST {{content_host}}/content/course/list?pageNo=1&pageSize=10
+POST {{gateway_host}}/content/course/list?pageNo=1&pageSize=10
 Content-Type: application/json
 
 {
@@ -86,3 +86,14 @@ DELETE {{content_host}}/content/courseTeacher/course/21/999
 
 ### delete course by id
 DELETE {{content_host}}/content/course/124
+
+### upload file
+POST {{media_host}}/media/upload/coursefile
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="filedata"; filename="1.jpg"
+Content-Type: application/octet-stream
+
+< e:/图片/壁纸/1.jpg
+
