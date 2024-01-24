@@ -50,11 +50,8 @@ public class MediaFilesController {
                 .build();
         // localFilePaht
         String localFilePath = tempFile.getAbsolutePath();
-
         return mediaFileService.uploadFile(companyId, uploadFileDTO, localFilePath);
-
     }
-
 
 
 

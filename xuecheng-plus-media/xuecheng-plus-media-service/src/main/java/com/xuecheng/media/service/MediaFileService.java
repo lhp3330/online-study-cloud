@@ -2,16 +2,14 @@ package com.xuecheng.media.service;
 
 import com.xuecheng.base.model.PageParams;
 import com.xuecheng.base.model.PageResult;
+import com.xuecheng.base.model.RestResponse;
 import com.xuecheng.media.model.dto.QueryMediaParamsDTO;
 import com.xuecheng.media.model.dto.UploadFileDTO;
 import com.xuecheng.media.model.pojo.MediaFiles;
 import com.xuecheng.media.model.vo.UploadFileVO;
 
 /**
- * @description 媒资文件管理业务类
- * @author Mr.M
- * @date 2022/9/10 8:55
- * @version 1.0
+ * @description 媒资文件管理业务类,minio文件(video)目录结构：文件MD5值前两位/MD5/**
  */
 public interface MediaFileService {
 
@@ -29,4 +27,28 @@ public interface MediaFileService {
      */
     UploadFileVO uploadFile(Long companyId, UploadFileDTO uploadFileDTO, String localFilePath);
 
+    /**
+     * save upload file info to db
+     */
+    MediaFiles saveUploadFileInfo(Long companyId, UploadFileDTO uploadFileDTO, String objeectName, String bucket, String fileMd5Value);
+
+    /**
+     * check file is exist
+     */
+    RestResponse<Boolean> checkFileIsExist(String fileMd5Value);
+
+    /**
+     * check fike chunk is exist
+     */
+    RestResponse<Boolean> checkFileChunkIsExist(String fileMd5Value, int chunk);
+
+    /**
+     * upload file chunk
+     */
+    RestResponse uploadFileChunk(String fileMd5Value, int chunk, String localFileChunkPath);
+
+    /**
+     * merge file chunks in minio
+     */
+    RestResponse mergeFileChunks(Long companyId,String fileMd5,int chunkTotal,UploadFileDTO uploadFileDTO);
 }
