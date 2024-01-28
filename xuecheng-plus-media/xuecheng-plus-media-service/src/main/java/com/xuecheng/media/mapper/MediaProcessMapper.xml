@@ -19,4 +19,21 @@
         id, file_id, filename, bucket, status, create_date, finish_date, url
     </sql>
 
+
+    <select id="selectByShardIndex" resultType="com.xuecheng.media.model.pojo.MediaProcess">
+        select * from media_process t
+        where t.id % #{shardTotal} = #{shardIndex}
+        and (t.status = '1' or t.status = '3')
+        and fail_count &lt; 3
+        limit #{count}
+    </select>
+
+    <update id="startTask">
+        update media_process m
+        set m.status = '4'
+        where (m.status = '1' or m.status = '3')
+          and m.fail_count &lt; 3
+          and m.id = #{id}
+    </update>
+
 </mapper>

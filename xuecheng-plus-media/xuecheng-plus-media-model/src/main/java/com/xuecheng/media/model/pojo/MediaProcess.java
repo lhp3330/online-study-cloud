@@ -72,7 +72,4 @@ public class MediaProcess implements Serializable {
      */
     private int failCount;
 
-
-
-
 }

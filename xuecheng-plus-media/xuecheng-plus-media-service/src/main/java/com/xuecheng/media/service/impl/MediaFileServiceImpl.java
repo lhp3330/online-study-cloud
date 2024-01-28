@@ -10,9 +10,11 @@ import com.xuecheng.base.model.PageParams;
 import com.xuecheng.base.model.PageResult;
 import com.xuecheng.base.model.RestResponse;
 import com.xuecheng.media.mapper.MediaFilesMapper;
+import com.xuecheng.media.mapper.MediaProcessMapper;
 import com.xuecheng.media.model.dto.QueryMediaParamsDTO;
 import com.xuecheng.media.model.dto.UploadFileDTO;
 import com.xuecheng.media.model.pojo.MediaFiles;
+import com.xuecheng.media.model.pojo.MediaProcess;
 import com.xuecheng.media.model.vo.UploadFileVO;
 import com.xuecheng.media.service.MediaFileService;
 import io.minio.*;
@@ -48,6 +50,9 @@ public class MediaFileServiceImpl implements MediaFileService {
 
     @Resource
     private MediaFilesMapper mediaFilesMapper;
+
+    @Resource
+    private MediaProcessMapper mediaProcessMapper;
 
     @Resource
     private MinioClient minioClient;
@@ -378,6 +383,9 @@ public class MediaFileServiceImpl implements MediaFileService {
                 log.error("failed to save uploadFile info to db, fileMd5Value: {}, bucket: {}, objectName: {}", fileMd5Value, bucket, objeectName);
                 return null;
             }
+            // create waiting task to db(media_process)
+            createWaitingTask(mediaFile);
+            // return
             return mediaFile;
         }
         return existMediaFile;
@@ -425,6 +433,23 @@ public class MediaFileServiceImpl implements MediaFileService {
         } catch (Exception e) {
             e.printStackTrace();
             log.error("clear file chunk failed,chunkFileFolderPath:{}", filceChunkFolderPath,  e);
+        }
+    }
+
+    /**
+     * create waiting task
+     */
+    private void createWaitingTask(MediaFiles mediaFiles) {
+        // get mimeType
+        String filename = mediaFiles.getFilename();
+        String fileExtendName = filename.substring(filename.lastIndexOf("."));
+        // change video code to MP4(jsut op for video)
+        if (fileExtendName.equals(".avi")) {
+            MediaProcess mediaProcess = new MediaProcess();
+            BeanUtils.copyProperties(mediaFiles,mediaProcess);
+            mediaProcess.setStatus("1");
+            mediaProcess.setFailCount(0);
+            mediaProcessMapper.insert(mediaProcess);
         }
     }
 }

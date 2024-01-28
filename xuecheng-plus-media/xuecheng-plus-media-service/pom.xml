@@ -84,8 +84,11 @@
             <groupId>org.synchronoss.cloud</groupId>
             <artifactId>nio-multipart-parser</artifactId>
         </dependency>
-
-
+    <!--xxl_job-->
+        <dependency>
+            <groupId>com.xuxueli</groupId>
+            <artifactId>xxl-job-core</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
