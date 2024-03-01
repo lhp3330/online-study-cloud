@@ -8,10 +8,12 @@ package com.xuecheng.content.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.xuecheng.base.enums.CustomException;
 import com.xuecheng.base.exception.BaseException;
+import com.xuecheng.base.exception.DatabaseException;
 import com.xuecheng.content.mapper.CourseTeacherMapper;
 import com.xuecheng.content.mapper.TeachplanMapper;
 import com.xuecheng.content.mapper.TeachplanMediaMapper;
 import com.xuecheng.content.model.dto.AddCourseTeacherDTO;
+import com.xuecheng.content.model.dto.BindTeachPlanMediaFileDTO;
 import com.xuecheng.content.model.dto.UpdateOrCreateTeachPlanDTO;
 import com.xuecheng.content.model.pojo.CourseTeacher;
 import com.xuecheng.content.model.pojo.Teachplan;
@@ -185,5 +187,36 @@ public class TeacherPlanServiceImpl implements TeacherPlanService {
         // db
         teachplanMapper.updateById(originTeachPlan);
         teachplanMapper.updateById(preTeachPlan);
+    }
+
+    /**
+     * bind teachPlan media file
+     * @param bindTeachplanMediaDto
+     */
+    @Override
+    @Transactional
+    public TeachplanMedia bindTeachPlanMediaFile(BindTeachPlanMediaFileDTO bindTeachplanMediaDTO) {
+        Long teachplanId = bindTeachplanMediaDTO.getTeachplanId();
+        Teachplan teachplan = teachplanMapper.selectById(teachplanId);
+        if (teachplan == null) {
+            throw new DatabaseException("teachPlan unexist");
+        }
+        Integer grade = teachplan.getGrade();
+        if (grade != 2) {
+            throw new DatabaseException("grade 2 cant bind media resource");
+        }
+        Long courseId = teachplan.getCourseId();
+        // delete origin bind
+        teachplanMediaMapper.delete(new LambdaQueryWrapper<TeachplanMedia>().eq(TeachplanMedia::getTeachplanId, teachplanId));
+        // bind new media file
+        TeachplanMedia teachplanMedia = TeachplanMedia.builder()
+                .courseId(courseId)
+                .teachplanId(teachplanId)
+                .mediaId(bindTeachplanMediaDTO.getMediaId())
+                .mediaFilename(bindTeachplanMediaDTO.getFileName())
+                .createDate(LocalDateTime.now())
+                .build();
+        teachplanMediaMapper.insert(teachplanMedia);
+        return teachplanMedia;
     }
 }

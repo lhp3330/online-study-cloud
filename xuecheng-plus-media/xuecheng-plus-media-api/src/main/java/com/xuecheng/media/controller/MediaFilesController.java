@@ -2,6 +2,7 @@ package com.xuecheng.media.controller;
 
 import com.xuecheng.base.model.PageParams;
 import com.xuecheng.base.model.PageResult;
+import com.xuecheng.base.model.RestResponse;
 import com.xuecheng.media.model.dto.QueryMediaParamsDTO;
 import com.xuecheng.media.model.dto.UploadFileDTO;
 import com.xuecheng.media.model.pojo.MediaFiles;
@@ -53,6 +54,12 @@ public class MediaFilesController {
         return mediaFileService.uploadFile(companyId, uploadFileDTO, localFilePath);
     }
 
-
+    /**
+     * media file preview
+     */
+    @GetMapping("/preview/{fileId}")
+    public RestResponse<MediaFiles> previewMediaFile(@PathVariable String fileId) {
+        return mediaFileService.queryMediaFileById(fileId);
+    }
 
 }

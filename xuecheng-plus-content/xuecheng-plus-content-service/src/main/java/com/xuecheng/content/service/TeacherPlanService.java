@@ -1,8 +1,10 @@
 package com.xuecheng.content.service;
 
 import com.xuecheng.content.model.dto.AddCourseTeacherDTO;
+import com.xuecheng.content.model.dto.BindTeachPlanMediaFileDTO;
 import com.xuecheng.content.model.dto.UpdateOrCreateTeachPlanDTO;
 import com.xuecheng.content.model.pojo.CourseTeacher;
+import com.xuecheng.content.model.pojo.TeachplanMedia;
 import com.xuecheng.content.model.vo.DeleteTeachPlanVO;
 import com.xuecheng.content.model.vo.TeachPlanVO;
 
@@ -35,5 +37,8 @@ public interface TeacherPlanService {
      */
     void teachPlanMoveUp(Long id);
 
-
+    /**
+     * bind teachPlan media file
+     */
+    TeachplanMedia bindTeachPlanMediaFile(BindTeachPlanMediaFileDTO bindTeachplanMediaDTO);
 }

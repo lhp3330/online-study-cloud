@@ -6,8 +6,10 @@ package com.xuecheng.content.controller;
 */
 
 import com.xuecheng.content.model.dto.AddCourseTeacherDTO;
+import com.xuecheng.content.model.dto.BindTeachPlanMediaFileDTO;
 import com.xuecheng.content.model.dto.UpdateOrCreateTeachPlanDTO;
 import com.xuecheng.content.model.pojo.CourseTeacher;
+import com.xuecheng.content.model.pojo.TeachplanMedia;
 import com.xuecheng.content.model.vo.DeleteTeachPlanVO;
 import com.xuecheng.content.model.vo.TeachPlanVO;
 import com.xuecheng.content.service.TeacherPlanService;
@@ -67,6 +69,15 @@ public class TeacherPlanController {
     @PostMapping("/teachplan/moveup/{id}")
     public void teachPlanMoveUp(@PathVariable Long id) {
         teacherPlanService.teachPlanMoveUp(id);
+    }
+
+    /**
+     * bind teachPlan media file
+     */
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/teachplan/association/media")
+    public TeachplanMedia associationMedia(@RequestBody BindTeachPlanMediaFileDTO bindTeachplanMediaDto) {
+        return teacherPlanService.bindTeachPlanMediaFile(bindTeachplanMediaDto);
     }
 
 }

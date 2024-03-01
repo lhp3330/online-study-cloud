@@ -15,8 +15,10 @@ import com.xuecheng.content.model.vo.CourseBaseInfoVO;
 import com.xuecheng.content.service.CourseBaseInfoService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 

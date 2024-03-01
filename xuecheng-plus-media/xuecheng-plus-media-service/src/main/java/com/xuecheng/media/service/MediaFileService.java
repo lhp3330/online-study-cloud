@@ -8,6 +8,8 @@ import com.xuecheng.media.model.dto.UploadFileDTO;
 import com.xuecheng.media.model.pojo.MediaFiles;
 import com.xuecheng.media.model.vo.UploadFileVO;
 
+import java.io.File;
+
 /**
  * @description 媒资文件管理业务类,minio文件(video)目录结构：文件MD5值前两位/MD5/**
  */
@@ -51,4 +53,19 @@ public interface MediaFileService {
      * merge file chunks in minio
      */
     RestResponse mergeFileChunks(Long companyId,String fileMd5,int chunkTotal,UploadFileDTO uploadFileDTO);
+
+    /**
+     * downLoad file from minio
+     */
+    File downLoadFileFromMinio(String bucket, String objectName);
+
+    /**
+     * upLoad file to minio
+     */
+    boolean uploadFileToMinio(String localFilePath, String mimeType, String bucket, String objectName);
+
+    /**
+     * query by id
+     */
+    RestResponse<MediaFiles> queryMediaFileById(String fileId);
 }
