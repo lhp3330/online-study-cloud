@@ -42,4 +42,5 @@ public class CoursePreviewServiceImpl implements CoursePreviewService {
                 .teachplans(teachPlanVOS)
                 .build();
     }
+
 }

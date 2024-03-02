@@ -6,6 +6,7 @@ package com.xuecheng.media.controller;
 */
 
 import com.xuecheng.base.model.RestResponse;
+import com.xuecheng.media.model.pojo.MediaFiles;
 import com.xuecheng.media.service.MediaFileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +29,8 @@ public class MediaOpenController {
      */
     @GetMapping("/preview/{mediaId}")
     public RestResponse getVideoUrl(@PathVariable String mediaId) {
-        return mediaFileService.queryMediaFileById(mediaId);
+        RestResponse<MediaFiles> mediaFilesRestResponse = mediaFileService.queryMediaFileById(mediaId);
+        String url = mediaFilesRestResponse.getResult().getUrl();
+        return RestResponse.success(url);
     }
 }

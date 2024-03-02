@@ -8,4 +8,5 @@ public interface CoursePreviewService {
      * get course preview info
      */
     CoursePreviewVO getCoursePreviewInfo(Long courseId);
+
 }
