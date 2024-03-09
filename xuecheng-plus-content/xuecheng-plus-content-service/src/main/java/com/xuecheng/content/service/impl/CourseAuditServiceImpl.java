@@ -21,7 +21,6 @@ import com.xuecheng.content.model.vo.TeachPlanVO;
 import com.xuecheng.content.service.CourseAuditService;
 import com.xuecheng.content.service.CourseBaseInfoService;
 import com.xuecheng.content.service.TeacherPlanService;
-import jdk.jfr.Threshold;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +40,6 @@ public class CourseAuditServiceImpl implements CourseAuditService {
 
     @Resource
     private CourseMarketMapper courseMarketMapper;
-
 
     @Resource
     private CourseTeacherMapper courseTeacherMapper;

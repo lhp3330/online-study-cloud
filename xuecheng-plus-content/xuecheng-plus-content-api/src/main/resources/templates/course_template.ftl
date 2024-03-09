@@ -60,7 +60,7 @@
             <p>
                 <a href="http://www.51xuecheng.cn/course/preview/learning.html?id=${model.courseBase.id}" target="_blank">
                     <#if model.courseBase.pic??>
-                        <img src="http://47.96.91.58:9000${model.courseBase.pic}" alt="" width="270" height="156">
+                        <img src="http://121.41.12.143:9000${model.courseBase.pic}" alt="" width="270" height="156">
                     <#else>
                         <img src="/static/img/widget-video.png" alt="" width="270" height="156">
                     </#if>

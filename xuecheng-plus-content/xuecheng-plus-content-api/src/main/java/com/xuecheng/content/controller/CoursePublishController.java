@@ -5,35 +5,27 @@ package com.xuecheng.content.controller;
    @Date:2024/3/1  22:10
 */
 
-import com.xuecheng.content.model.vo.CoursePreviewVO;
-import com.xuecheng.content.service.CoursePreviewService;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
+import com.xuecheng.content.service.CoursePublishService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 
-@Controller
+@Slf4j
+@RestController
 public class CoursePublishController {
 
+
     @Resource
-    private CoursePreviewService coursePreviewService;
+    private CoursePublishService coursePublishService;
 
     /**
-     * course preview info
+     * course publish
      * @param courseId
-     * @return
      */
-    @GetMapping("/coursepreview/{courseId}")
-    ModelAndView coursePreviewInfo(@PathVariable Long courseId) {
-        CoursePreviewVO coursePreviewInfo = coursePreviewService.getCoursePreviewInfo(courseId);
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("model", coursePreviewInfo);
-        modelAndView.setViewName("course_template");
-        return modelAndView;
+    @PostMapping ("/coursepublish/{courseId}")
+    public void coursePublish(@PathVariable("courseId") Long courseId) {
+        Long companyId = 123456L;
+        coursePublishService.publishCourse(courseId, companyId);
     }
 
 }
