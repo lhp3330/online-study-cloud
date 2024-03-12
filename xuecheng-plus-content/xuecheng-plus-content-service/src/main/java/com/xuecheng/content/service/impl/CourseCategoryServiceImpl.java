@@ -31,7 +31,6 @@ public class CourseCategoryServiceImpl implements CourseCategoryService {
      */
     @Override
     public List<CourseCategoryTreeDTO> queryTreeNodes(String id) {
-
         List<CourseCategoryTreeDTO> courseCategoryTreeDTOs = courseCategoryMapper.selectTreeNodes(id);
         //将list转map,以备使用,排除根节点
         Map<String, CourseCategoryTreeDTO> mapTemp = courseCategoryTreeDTOs.stream()
@@ -53,7 +52,7 @@ public class CourseCategoryServiceImpl implements CourseCategoryService {
                 if (courseCategoryTreeDTO.getChildrenTreeNodes() == null){
                     courseCategoryTreeDTO.setChildrenTreeNodes(new ArrayList<CourseCategoryTreeDTO>());
                 }
-                //下边开始往ChildrenTreeNodes属性中放子节点
+                //往ChildrenTreeNodes属性中放子节点
                 courseCategoryTreeDTO.getChildrenTreeNodes().add(item);
             }
         });

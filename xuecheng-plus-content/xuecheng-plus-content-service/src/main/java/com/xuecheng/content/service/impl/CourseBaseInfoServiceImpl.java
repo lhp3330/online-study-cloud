@@ -76,9 +76,6 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
      */
     @Transactional
     public CourseBaseInfoVO saveCourseBaseInfo(Long companyId, AddCourseDTO addCourseDTO) {
-        // 参数合法性校验
-        // TODO: 2024/1/11
-
         // 保存课程基本信息
         CourseBase courseBase = new CourseBase();
         BeanUtils.copyProperties(addCourseDTO, courseBase);
