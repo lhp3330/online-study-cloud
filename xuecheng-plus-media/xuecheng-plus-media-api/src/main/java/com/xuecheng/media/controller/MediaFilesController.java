@@ -34,10 +34,10 @@ public class MediaFilesController {
     }
 
     /**
-     * uploadFile (image)
+     * uploadFile (image, static page)
      */
     @RequestMapping(value = "/upload/coursefile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public UploadFileVO uploadFile(@RequestPart("filedata") MultipartFile upLoadFile) throws IOException {
+    public UploadFileVO uploadFile(@RequestPart("filedata") MultipartFile upLoadFile, @RequestParam(value = "objectName", required = false) String objectName) throws IOException {
         // prepare params
         Long companyId = 1232141425L;
         // construct a temp file
@@ -51,7 +51,7 @@ public class MediaFilesController {
                 .build();
         // localFilePaht
         String localFilePath = tempFile.getAbsolutePath();
-        return mediaFileService.uploadFile(companyId, uploadFileDTO, localFilePath);
+        return mediaFileService.uploadFile(companyId, uploadFileDTO, localFilePath, objectName);
     }
 
     /**

@@ -8,19 +8,26 @@ package com.xuecheng.content;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xuecheng.ContentServiceApplication;
 import com.xuecheng.base.model.PageParams;
 import com.xuecheng.base.model.PageResult;
+import com.xuecheng.content.config.MultipartSupportConfig;
+import com.xuecheng.content.feignclient.MediaServiceClient;
 import com.xuecheng.content.mapper.CourseBaseMapper;
 import com.xuecheng.content.model.dto.QueryCourseParamsDTO;
 import com.xuecheng.content.model.pojo.CourseBase;
 import com.xuecheng.content.service.CourseBaseInfoService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.util.List;
 
-@SpringBootTest
+@EnableFeignClients(basePackages = {"com.xuecheng.content.feignclient"})
+@SpringBootTest(classes = ContentServiceApplication.class)
 public class ContentTestApplication {
 
     @Resource
@@ -28,6 +35,9 @@ public class ContentTestApplication {
 
     @Resource
     CourseBaseInfoService courseBaseInfoService;
+
+    @Resource
+    MediaServiceClient mediaServiceClient;
 
 
     @Test
@@ -57,5 +67,11 @@ public class ContentTestApplication {
         QueryCourseParamsDTO dto = new QueryCourseParamsDTO("java", "202004", "203001");
         PageResult<CourseBase> result = courseBaseInfoService.queryCourseBaseList(params, dto);
         System.out.println(result);
+    }
+
+    @Test
+    public void feignTest() {
+        MultipartFile multipartFile = MultipartSupportConfig.getMultipartFile(new File("E:\\abc.html"));
+        mediaServiceClient.uploadFile(multipartFile, "course/112313412.html");
     }
 }

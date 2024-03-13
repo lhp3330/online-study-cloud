@@ -5,7 +5,6 @@ spring:
     active: dev
   main:
     banner-mode: off
-
   cloud:
     nacos:
       server-addr: 121.41.12.143:8848
@@ -17,4 +16,7 @@ spring:
         group:  xuecheng-plus-project
         file-extension: yaml
         refresh-enabled: true
-
+        shared-configs:
+          - data-id: feign-${spring.profiles.active}.yaml
+            group: xuecheng-plus-common
+            refresh: true

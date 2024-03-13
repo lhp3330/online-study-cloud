@@ -27,7 +27,7 @@ public interface MediaFileService {
      * @param uploadFileDTO 上传参数
      * @param localFilePath 本地文件路径
      */
-    UploadFileVO uploadFile(Long companyId, UploadFileDTO uploadFileDTO, String localFilePath);
+    UploadFileVO uploadFile(Long companyId, UploadFileDTO uploadFileDTO, String localFilePath, String objectName);
 
     /**
      * save upload file info to db
