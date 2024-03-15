@@ -13,7 +13,7 @@ logs
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 **/target/
-**/test/
+**/**/test/
 # Package Files #
 *.jar
 *.war

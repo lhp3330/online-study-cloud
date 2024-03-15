@@ -34,8 +34,8 @@ public class MultipartSupportConfig {
     private ObjectFactory<HttpMessageConverters> messageConverters;
 
     @Bean
-    @Primary//注入相同类型的bean时优先使用
-    @Scope("prototype")
+    @Primary // 注入相同类型的bean时优先使用
+    @Scope("prototype") // 单例
     public Encoder feignEncoder() {
         return new SpringFormEncoder(new SpringEncoder(messageConverters));
     }

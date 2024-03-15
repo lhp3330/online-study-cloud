@@ -14,7 +14,6 @@ import javax.annotation.Resource;
 @RestController
 public class CoursePublishController {
 
-
     @Resource
     private CoursePublishService coursePublishService;
 

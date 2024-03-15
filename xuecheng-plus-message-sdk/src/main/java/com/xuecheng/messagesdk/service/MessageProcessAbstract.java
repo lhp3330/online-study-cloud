@@ -44,7 +44,7 @@ public abstract class MessageProcessAbstract {
      * @author Mr.M
      * @date 2022/9/21 20:35
     */
-    public void process(int shardIndex, int shardTotal,  String messageType,int count,long timeout) {
+    public void process(int shardIndex, int shardTotal, String messageType, int count, long timeout) {
 
         try {
             //扫描消息表获取任务清单
@@ -87,9 +87,8 @@ public abstract class MessageProcessAbstract {
 
                 });
             });
-
             //等待,给一个充裕的超时时间,防止无限等待，到达超时时间还没有处理完成则结束任务
-            countDownLatch.await(timeout,TimeUnit.SECONDS);
+            countDownLatch.await(timeout, TimeUnit.SECONDS);
             System.out.println("结束....");
         } catch (InterruptedException e) {
            e.printStackTrace();

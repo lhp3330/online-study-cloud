@@ -5,6 +5,7 @@ package com.xuecheng.content.service.jobhandler;
    @Date:2024/3/12  21:34
 */
 
+import com.xuecheng.content.service.CoursePublishService;
 import com.xuecheng.messagesdk.model.po.MqMessage;
 import com.xuecheng.messagesdk.service.MessageProcessAbstract;
 import com.xuecheng.messagesdk.service.MqMessageService;
@@ -13,19 +14,23 @@ import com.xxl.job.core.handler.annotation.XxlJob;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
+import java.io.File;
+
 @Slf4j
 @Component
 public class CoursePublishTask extends MessageProcessAbstract {
 
+    @Resource
+    private CoursePublishService coursePublishService;
+
 
     @XxlJob("coursePublishHandler")
     public void coursePublishHandler() {
-        System.out.println(XxlJobHelper.getShardIndex());
-        log.info("xxljob>>>>>>>>>>");
+        int shardIndex = XxlJobHelper.getShardIndex();
+        int shardTotal = XxlJobHelper.getShardTotal();
+        process(shardIndex, shardTotal, "course_publish", 1, 10);
     }
-
-
-
 
     /**
      * @param mqMessage execute task content
@@ -42,7 +47,8 @@ public class CoursePublishTask extends MessageProcessAbstract {
         saveCourseCache(mqMessage, courseId);
         // minio
         generateCourseHtml(mqMessage, courseId);
-        return false;
+        //
+        return true;
     }
 
     /**
@@ -57,9 +63,10 @@ public class CoursePublishTask extends MessageProcessAbstract {
             log.info("task has done");
             return;
         }
-        // TODO: 2024/3/12 .....
-
-        //
+        // generate static page
+        File courseHtml = coursePublishService.generateCourseHtml(courseId);
+        coursePublishService.uploadCourseHtml(courseId, courseHtml);
+        // complete
         mqMessageService.completedStageOne(taskId);
     }
 
