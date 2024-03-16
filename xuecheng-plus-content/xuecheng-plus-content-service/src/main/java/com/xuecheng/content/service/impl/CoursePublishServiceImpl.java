@@ -138,6 +138,19 @@ public class CoursePublishServiceImpl implements CoursePublishService {
     }
 
     /**
+     * course depublish
+     */
+    @Override
+    public void dePublishCourse(Long courseId) {
+        CourseBase courseBase = CourseBase.builder()
+                .auditStatus("202002")
+                .status("203003")
+                .build();
+        LambdaQueryWrapper<CourseBase> wrapper = new LambdaQueryWrapper<CourseBase>().eq(CourseBase::getId, courseId);
+        courseBaseMapper.update(courseBase, wrapper);
+    }
+
+    /**
      * save course publish mq
      */
     private void saveCoursePublishMessage(Long courseId) {
@@ -149,8 +162,8 @@ public class CoursePublishServiceImpl implements CoursePublishService {
      */
     private void updateCourseBaseStatus(Long courseId) {
         CourseBase courseBase = new CourseBase();
-        courseBase.setAuditStatus("203002");
-        courseBase.setStatus("202004");
+        courseBase.setAuditStatus("202004");
+        courseBase.setStatus("203002");
         LambdaQueryWrapper<CourseBase> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(CourseBase::getId, courseId);
         courseBaseMapper.update(courseBase, wrapper);

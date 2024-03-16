@@ -5,6 +5,10 @@ package com.xuecheng.content.service.jobhandler;
    @Date:2024/3/12  21:34
 */
 
+import com.xuecheng.base.model.CourseIndex;
+import com.xuecheng.content.feignclient.SearchServiceClient;
+import com.xuecheng.content.mapper.CourseBaseMapper;
+import com.xuecheng.content.model.pojo.CourseBase;
 import com.xuecheng.content.service.CoursePublishService;
 import com.xuecheng.messagesdk.model.po.MqMessage;
 import com.xuecheng.messagesdk.service.MessageProcessAbstract;
@@ -12,6 +16,7 @@ import com.xuecheng.messagesdk.service.MqMessageService;
 import com.xxl.job.core.context.XxlJobHelper;
 import com.xxl.job.core.handler.annotation.XxlJob;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -23,6 +28,12 @@ public class CoursePublishTask extends MessageProcessAbstract {
 
     @Resource
     private CoursePublishService coursePublishService;
+
+    @Resource
+    private SearchServiceClient searchServiceClient;
+
+    @Resource
+    private CourseBaseMapper courseBaseMapper;
 
 
     @XxlJob("coursePublishHandler")
@@ -40,7 +51,6 @@ public class CoursePublishTask extends MessageProcessAbstract {
     public boolean execute(MqMessage mqMessage) {
         //
         Long courseId = Long.valueOf(mqMessage.getBusinessKey1());
-
         // es
         saveCourseIndex(mqMessage, courseId);
         // redis
@@ -81,8 +91,11 @@ public class CoursePublishTask extends MessageProcessAbstract {
             log.info("task has done");
             return;
         }
+        CourseBase courseBase = courseBaseMapper.selectById(courseId);
+        CourseIndex courseIndex = new CourseIndex();
+        BeanUtils.copyProperties(courseBase, courseIndex);
         // TODO: 2024/3/12 .....
-
+        searchServiceClient.add(courseIndex);
         //
         mqMessageService.completedStageTwo(taskId);
     }

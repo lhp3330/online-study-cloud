@@ -27,4 +27,12 @@ public class CoursePublishController {
         coursePublishService.publishCourse(courseId, companyId);
     }
 
+    /**
+     * course dePublish
+     */
+    @GetMapping("/courseoffline/{courseId}")
+    public void courseDePublish(@PathVariable("courseId") Long courseId) {
+        coursePublishService.dePublishCourse(courseId);
+    }
+
 }

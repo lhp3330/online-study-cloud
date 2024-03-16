@@ -1,34 +1,27 @@
-package com.xuecheng.content.model.pojo;
+package com.xuecheng.base.model;
 
-import com.baomidou.mybatisplus.annotation.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
  * <p>
- * 课程基本信息
+ * 课程索引信息
  * </p>
  *
  * @author itcast
  */
 @Data
-@Builder
-@TableName("course_base")
-@AllArgsConstructor
-@NoArgsConstructor
-public class CourseBase implements Serializable {
+public class CourseIndex implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * 主键
      */
-    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
@@ -37,7 +30,7 @@ public class CourseBase implements Serializable {
     private Long companyId;
 
     /**
-     * 机构名称
+     * 公司名称
      */
     private String companyName;
 
@@ -52,9 +45,10 @@ public class CourseBase implements Serializable {
     private String users;
 
     /**
-     * 课程标签
+     * 标签
      */
     private String tags;
+
 
     /**
      * 大分类
@@ -62,9 +56,21 @@ public class CourseBase implements Serializable {
     private String mt;
 
     /**
+     * 大分类名称
+     */
+    private String mtName;
+
+    /**
      * 小分类
      */
     private String st;
+
+    /**
+     * 小分类名称
+     */
+    private String stName;
+
+
 
     /**
      * 课程等级
@@ -72,51 +78,55 @@ public class CourseBase implements Serializable {
     private String grade;
 
     /**
-     * 教育模式(common普通，record 录播，live直播等）
+     * 教育模式
      */
     private String teachmode;
-
-    /**
-     * 课程介绍
-     */
-    private String description;
-
     /**
      * 课程图片
      */
     private String pic;
 
     /**
-     * 创建时间
+     * 课程介绍
      */
-    @TableField(fill = FieldFill.INSERT)
+    private String description;
+
+
+    /**
+     * 发布时间
+     */
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createDate;
 
     /**
-     * 修改时间
-     */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime changeDate;
-
-    /**
-     * 创建人
-     */
-    private String createPeople;
-
-    /**
-     * 更新人
-     */
-    private String changePeople;
-
-    /**
-     * 审核状态
-     */
-    private String auditStatus;
-
-    /**
-     * 课程发布状态 未发布  已发布 下线
+     * 状态
      */
     private String status;
+
+    /**
+     * 备注
+     */
+    private String remark;
+
+    /**
+     * 收费规则，对应数据字典--203
+     */
+    private String charge;
+
+    /**
+     * 现价
+     */
+    private Float price;
+    /**
+     * 原价
+     */
+    private Float originalPrice;
+
+    /**
+     * 课程有效期天数
+     */
+    private Integer validDays;
 
 
 }

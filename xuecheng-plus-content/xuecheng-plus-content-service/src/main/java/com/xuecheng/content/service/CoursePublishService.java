@@ -26,7 +26,8 @@ public interface CoursePublishService {
     File generateCourseHtml(Long courseId);
 
     /**
-     * create a new course index
+     * course depublish
      */
+    void dePublishCourse(Long courseId);
 
 }
